@@ -1,8 +1,9 @@
 package org.example.restaurante.service;
 
-import org.example.restaurante.dto.ItemCardapioDTO; // Importe o DTO
+import org.example.restaurante.dto.ItemCardapioDTO;
 import org.example.restaurante.Model.ItemCardapio;
 import org.example.restaurante.repository.ItemCardapioRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +14,15 @@ import java.util.stream.Collectors;
 public class CardapioService {
 
     private final ItemCardapioRepository itemCardapioRepository;
-    private final String CHAVE_MESTRE = "SEGREDO123";
+
+    @Value("${app.security.master-key}")
+    private String chaveMestre;
 
     public CardapioService(ItemCardapioRepository itemCardapioRepository) {
         this.itemCardapioRepository = itemCardapioRepository;
     }
 
-    public List<ItemCardapioDTO> buscarTodosItensDTO() { // Novo método que retorna DTO
+    public List<ItemCardapioDTO> buscarTodosItensDTO() {
         return itemCardapioRepository.findAll().stream()
                 .map(this::toItemCardapioDTO)
                 .collect(Collectors.toList());
@@ -30,7 +33,7 @@ public class CardapioService {
     }
 
     public ItemCardapioDTO adicionarItem(ItemCardapio item, String chaveAcesso) throws IllegalArgumentException {
-        if (!chaveAcesso.equals(CHAVE_MESTRE)) {
+        if (!chaveAcesso.equals(this.chaveMestre)) {
             throw new IllegalArgumentException("Chave de acesso inválida!");
         }
         ItemCardapio savedItem = itemCardapioRepository.save(item);
@@ -42,7 +45,7 @@ public class CardapioService {
     }
 
     public boolean validarChaveMestre(String chave) {
-        return chave.equals(CHAVE_MESTRE);
+        return chave.equals(this.chaveMestre);
     }
 
     private ItemCardapioDTO toItemCardapioDTO(ItemCardapio item) {

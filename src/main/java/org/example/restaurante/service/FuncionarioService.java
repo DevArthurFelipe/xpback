@@ -1,10 +1,10 @@
-
 package org.example.restaurante.service;
 
-import org.example.restaurante.dto.FuncionarioDTO; // Importe o DTO
+import org.example.restaurante.dto.FuncionarioDTO;
 import org.example.restaurante.Model.Funcionario;
 import org.example.restaurante.repository.FuncionarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Optional;
 
@@ -12,7 +12,9 @@ import java.util.Optional;
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
-    private final String CHAVE_MESTRE = "SEGREDO123";
+
+    @Value("${app.security.master-key}")
+    private String chaveMestre;
 
     public FuncionarioService(FuncionarioRepository funcionarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
@@ -27,7 +29,7 @@ public class FuncionarioService {
     }
 
     public FuncionarioDTO registrarFuncionario(Funcionario funcionario, String chaveAcesso) throws IllegalArgumentException {
-        if (!chaveAcesso.equals(CHAVE_MESTRE)) {
+        if (!chaveAcesso.equals(this.chaveMestre)) {
             throw new IllegalArgumentException("Chave de acesso inválida!");
         }
         Funcionario savedFuncionario = funcionarioRepository.save(funcionario);
@@ -35,10 +37,9 @@ public class FuncionarioService {
     }
 
     public boolean validarChaveMestre(String chave) {
-        return chave.equals(CHAVE_MESTRE);
+        return chave.equals(this.chaveMestre);
     }
 
-    // Método de conversão
     private FuncionarioDTO toFuncionarioDTO(Funcionario funcionario) {
         return new FuncionarioDTO(funcionario.getId(), funcionario.getUsername(), funcionario.getCargo());
     }

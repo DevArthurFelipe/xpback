@@ -1,4 +1,3 @@
-// src/main/java/org/example/restaurante/service/ComandaService.java
 package org.example.restaurante.service;
 
 import org.example.restaurante.dto.ComandaDTO; // Importe o DTO
