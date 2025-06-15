@@ -16,15 +16,6 @@ Este projeto é o backend de um sistema de gerenciamento para restaurantes, dese
 
 ---
 
-## Como Executar o Projeto
-
-1.  **Pré-requisitos:** É necessário ter o Java 17 e o Maven instalados, além de um servidor MySQL em execução.
-2.  **Configuração do Banco:** Crie um banco de dados no MySQL chamado `javafx` e configure o usuário e senha no arquivo `src/main/resources/application.properties`.
-3.  **Build:** Navegue até a pasta raiz do projeto e execute o comando `mvn clean install` para baixar as dependências e compilar o projeto.
-4.  **Execução:** Após o build, execute o projeto com o comando `mvn spring-boot:run`. A aplicação estará disponível em `http://localhost:8080`.
-
----
-
 ## Principais Endpoints da API
 
 * `POST /api/auth/login`: Autentica um funcionário.
