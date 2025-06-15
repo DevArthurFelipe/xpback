@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -135,5 +136,21 @@ public class ComandaService {
                 comanda.getObservacao(),
                 itensDTO
         );
+    }
+
+    public Map<String, Object> gerarRelatorioDiario(String dataStr) {
+        LocalDate dataRelatorio = (dataStr != null && !dataStr.isEmpty()) ? LocalDate.parse(dataStr) : LocalDate.now();
+
+        List<ComandaDTO> comandasFechadasHoje = this.buscarComandasFechadasPorDataDTO(dataRelatorio);
+        double totalVendas = this.calcularTotalVendas(comandasFechadasHoje);
+        Map<Long, Double> totaisPorComanda = this.calcularTotaisPorComanda(comandasFechadasHoje);
+
+        Map<String, Object> relatorioData = new HashMap<>();
+        relatorioData.put("data", dataRelatorio);
+        relatorioData.put("comandas", comandasFechadasHoje);
+        relatorioData.put("totaisPorComanda", totaisPorComanda);
+        relatorioData.put("totalVendas", totalVendas);
+
+        return relatorioData;
     }
 }
