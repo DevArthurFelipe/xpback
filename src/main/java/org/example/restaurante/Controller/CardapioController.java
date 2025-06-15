@@ -1,7 +1,7 @@
 
 package org.example.restaurante.Controller;
 
-import org.example.restaurante.dto.ItemCardapioDTO; // Importe o DTO
+import org.example.restaurante.dto.ItemCardapioDTO;
 import org.example.restaurante.Model.ItemCardapio;
 import org.example.restaurante.service.CardapioService;
 import org.springframework.http.HttpStatus;

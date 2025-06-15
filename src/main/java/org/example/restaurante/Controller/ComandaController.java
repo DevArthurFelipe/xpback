@@ -12,7 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controlador REST para gerenciar as operações relacionadas às Comandas.
+ * Responsável por receber as requisições HTTP para criar, listar, fechar
+ * e modificar as comandas do restaurante.
+ */
 @RestController
 @RequestMapping("/api/comandas")
 public class ComandaController {

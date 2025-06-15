@@ -1,7 +1,7 @@
 package org.example.restaurante.service;
 
-import org.example.restaurante.dto.ComandaDTO; // Importe o DTO
-import org.example.restaurante.dto.ItemDTO; // Importe o DTO
+import org.example.restaurante.dto.ComandaDTO;
+import org.example.restaurante.dto.ItemDTO;
 import org.example.restaurante.Model.Comanda;
 import org.example.restaurante.Model.ItemCardapio;
 import org.example.restaurante.Model.ItemComanda;
@@ -18,7 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+/**
+ * Camada de serviço contendo a lógica de negócio para as Comandas.
+ * Orquestra as operações de acesso a dados através dos repositórios
+ * e realiza os cálculos e manipulações necessárias para o gerenciamento das comandas.
+ */
 @Service
 public class ComandaService {
 

@@ -1,11 +1,11 @@
 package org.example.restaurante.Model;
 
 import jakarta.persistence.*;
-import lombok.Data; // Adicionado
-import lombok.NoArgsConstructor; // Adicionado
-import lombok.AllArgsConstructor; // Adicionado
-import lombok.EqualsAndHashCode; // Adicionado para lidar com a referência cíclica na Comanda
-import lombok.ToString; // Adicionado para lidar com a referência cíclica na Comanda
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data

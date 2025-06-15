@@ -1,8 +1,8 @@
 package org.example.restaurante.dto;
 
-import lombok.AllArgsConstructor; // Adicionado
-import lombok.Data; // Adicionado
-import lombok.NoArgsConstructor; // Adicionado
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
