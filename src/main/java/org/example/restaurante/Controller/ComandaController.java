@@ -1,7 +1,7 @@
 
 package org.example.restaurante.Controller;
 
-import org.example.restaurante.dto.ComandaDTO; // Importe o DTO
+import org.example.restaurante.dto.ComandaDTO;
 import org.example.restaurante.dto.ItemDTO;
 import org.example.restaurante.Model.Comanda;
 import org.example.restaurante.Model.ItemCardapio;

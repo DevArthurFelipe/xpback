@@ -3,6 +3,7 @@ package org.example.restaurante.service;
 import org.example.restaurante.dto.FuncionarioDTO;
 import org.example.restaurante.Model.Funcionario;
 import org.example.restaurante.repository.FuncionarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -16,12 +17,14 @@ import java.util.Optional;
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${app.security.master-key}")
     private String chaveMestre;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, PasswordEncoder passwordEncoder) {
         this.funcionarioRepository = funcionarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -32,9 +35,9 @@ public class FuncionarioService {
      * ou um Optional vazio caso contrário.
      */
     public Optional<FuncionarioDTO> autenticar(String username, String password) {
-        Optional<Funcionario> funcionario = funcionarioRepository.findByUsername(username);
-        if (funcionario.isPresent() && funcionario.get().getPassword().equals(password)) {
-            return Optional.of(toFuncionarioDTO(funcionario.get()));
+        Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByUsername(username);
+        if (funcionarioOpt.isPresent() && passwordEncoder.matches(password, funcionarioOpt.get().getPassword())) {
+            return Optional.of(toFuncionarioDTO(funcionarioOpt.get()));
         }
         return Optional.empty();
     }
@@ -50,6 +53,7 @@ public class FuncionarioService {
         if (!chaveAcesso.equals(this.chaveMestre)) {
             throw new IllegalArgumentException("Chave de acesso inválida!");
         }
+        funcionario.setPassword(passwordEncoder.encode(funcionario.getPassword()));
         Funcionario savedFuncionario = funcionarioRepository.save(funcionario);
         return toFuncionarioDTO(savedFuncionario);
     }
