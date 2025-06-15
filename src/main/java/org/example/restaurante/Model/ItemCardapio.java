@@ -1,9 +1,11 @@
 package org.example.restaurante.Model;
 
 import jakarta.persistence.*;
-import lombok.Data; // Adicionado
-import lombok.NoArgsConstructor; // Adicionado
-import lombok.AllArgsConstructor; // Adicionado
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Data
@@ -15,7 +17,9 @@ public class ItemCardapio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "O nome do item não pode estar em branco")
     private String nome;
-    private double preco;
 
+    @PositiveOrZero(message = "O preço deve ser um valor positivo ou zero")
+    private double preco;
 }
