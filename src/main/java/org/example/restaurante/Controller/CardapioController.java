@@ -1,4 +1,3 @@
-
 package org.example.restaurante.Controller;
 
 import org.example.restaurante.dto.ItemCardapioDTO;
@@ -10,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para o gerenciamento do cardápio do restaurante.
+ * Permite listar, adicionar e remover itens do cardápio.
+ */
 @RestController
 @RequestMapping("/api/cardapio")
 public class CardapioController {
@@ -20,12 +23,23 @@ public class CardapioController {
         this.cardapioService = cardapioService;
     }
 
+    /**
+     * Retorna a lista completa de itens disponíveis no cardápio.
+     * @return um ResponseEntity contendo a lista de ItemCardapioDTO (200 OK).
+     */
     @GetMapping
     public ResponseEntity<List<ItemCardapioDTO>> listarCardapio() {
         List<ItemCardapioDTO> itens = cardapioService.buscarTodosItensDTO();
         return ResponseEntity.ok(itens);
     }
 
+    /**
+     * Adiciona um novo item ao cardápio.
+     * Requer uma chave de acesso para autorização.
+     * @param item O corpo da requisição com os dados do novo item.
+     * @param chave A chave mestra para autorizar a operação.
+     * @return O novo item criado como ItemCardapioDTO (201 CREATED) ou uma mensagem de erro (401 Unauthorized).
+     */
     @PostMapping
     public ResponseEntity<?> adicionarItem(@RequestBody ItemCardapio item, @RequestParam String chave) {
         try {
@@ -36,10 +50,14 @@ public class CardapioController {
         }
     }
 
+    /**
+     * Deleta um item do cardápio com base no seu ID.
+     * @param id O ID do item a ser deletado.
+     * @return Uma resposta vazia com status (204 No Content).
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarItem(@PathVariable Long id) {
         cardapioService.deletarItem(id);
         return ResponseEntity.noContent().build();
     }
-
 }

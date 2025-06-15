@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Optional;
 
+/**
+ * Camada de serviço responsável pela lógica de negócio relacionada aos funcionários,
+ * incluindo autenticação e registro.
+ */
 @Service
 public class FuncionarioService {
 
@@ -20,6 +24,13 @@ public class FuncionarioService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
+    /**
+     * Autentica um funcionário com base no nome de usuário e senha.
+     * @param username O nome de usuário para autenticação.
+     * @param password A senha do usuário.
+     * @return um Optional contendo o FuncionarioDTO se a autenticação for bem-sucedida,
+     * ou um Optional vazio caso contrário.
+     */
     public Optional<FuncionarioDTO> autenticar(String username, String password) {
         Optional<Funcionario> funcionario = funcionarioRepository.findByUsername(username);
         if (funcionario.isPresent() && funcionario.get().getPassword().equals(password)) {
@@ -28,6 +39,13 @@ public class FuncionarioService {
         return Optional.empty();
     }
 
+    /**
+     * Registra um novo funcionário no sistema após validar a chave de acesso.
+     * @param funcionario A entidade Funcionario com os dados a serem salvos.
+     * @param chaveAcesso A chave mestra necessária para autorizar a operação.
+     * @return O DTO do funcionário recém-criado.
+     * @throws IllegalArgumentException se a chave de acesso for inválida.
+     */
     public FuncionarioDTO registrarFuncionario(Funcionario funcionario, String chaveAcesso) throws IllegalArgumentException {
         if (!chaveAcesso.equals(this.chaveMestre)) {
             throw new IllegalArgumentException("Chave de acesso inválida!");
@@ -36,10 +54,20 @@ public class FuncionarioService {
         return toFuncionarioDTO(savedFuncionario);
     }
 
+    /**
+     * Valida se a chave fornecida corresponde à chave mestra da aplicação.
+     * @param chave A chave a ser validada.
+     * @return true se a chave for válida, false caso contrário.
+     */
     public boolean validarChaveMestre(String chave) {
         return chave.equals(this.chaveMestre);
     }
 
+    /**
+     * Converte uma entidade Funcionario para seu respectivo DTO, omitindo a senha.
+     * @param funcionario A entidade a ser convertida.
+     * @return O objeto FuncionarioDTO.
+     */
     private FuncionarioDTO toFuncionarioDTO(Funcionario funcionario) {
         return new FuncionarioDTO(funcionario.getId(), funcionario.getUsername(), funcionario.getCargo());
     }
