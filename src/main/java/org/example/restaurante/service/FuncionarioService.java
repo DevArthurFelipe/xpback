@@ -2,6 +2,7 @@ package org.example.restaurante.service;
 
 import org.example.restaurante.dto.FuncionarioDTO;
 import org.example.restaurante.Model.Funcionario;
+import org.example.restaurante.exception.InvalidMasterKeyException;
 import org.example.restaurante.repository.FuncionarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,11 @@ public class FuncionarioService {
      * @param funcionario A entidade Funcionario com os dados a serem salvos.
      * @param chaveAcesso A chave mestra necessária para autorizar a operação.
      * @return O DTO do funcionário recém-criado.
-     * @throws IllegalArgumentException se a chave de acesso for inválida.
+     * @throws InvalidMasterKeyException se a chave de acesso for inválida.
      */
-    public FuncionarioDTO registrarFuncionario(Funcionario funcionario, String chaveAcesso) throws IllegalArgumentException {
+    public FuncionarioDTO registrarFuncionario(Funcionario funcionario, String chaveAcesso) {
         if (!chaveAcesso.equals(this.chaveMestre)) {
-            throw new IllegalArgumentException("Chave de acesso inválida!");
+            throw new InvalidMasterKeyException("Chave de acesso inválida!");
         }
         funcionario.setPassword(passwordEncoder.encode(funcionario.getPassword()));
         Funcionario savedFuncionario = funcionarioRepository.save(funcionario);

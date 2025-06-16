@@ -2,6 +2,7 @@ package org.example.restaurante.service;
 
 import org.example.restaurante.dto.ItemCardapioDTO;
 import org.example.restaurante.Model.ItemCardapio;
+import org.example.restaurante.exception.InvalidMasterKeyException;
 import org.example.restaurante.repository.ItemCardapioRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,11 +50,11 @@ public class CardapioService {
      * @param item O novo item a ser salvo.
      * @param chaveAcesso A chave mestra para autorização.
      * @return O DTO do item salvo.
-     * @throws IllegalArgumentException se a chave de acesso for inválida.
+     * @throws InvalidMasterKeyException se a chave de acesso for inválida.
      */
-    public ItemCardapioDTO adicionarItem(ItemCardapio item, String chaveAcesso) throws IllegalArgumentException {
+    public ItemCardapioDTO adicionarItem(ItemCardapio item, String chaveAcesso) {
         if (!chaveAcesso.equals(this.chaveMestre)) {
-            throw new IllegalArgumentException("Chave de acesso inválida!");
+            throw new InvalidMasterKeyException("Chave de acesso inválida!");
         }
         ItemCardapio savedItem = itemCardapioRepository.save(item);
         return toItemCardapioDTO(savedItem);

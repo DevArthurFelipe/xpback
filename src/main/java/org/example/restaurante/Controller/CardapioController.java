@@ -38,16 +38,12 @@ public class CardapioController {
      * Requer uma chave de acesso para autorização.
      * @param item O corpo da requisição com os dados do novo item.
      * @param chave A chave mestra para autorizar a operação.
-     * @return O novo item criado como ItemCardapioDTO (201 CREATED) ou uma mensagem de erro (401 Unauthorized).
+     * @return O novo item criado como ItemCardapioDTO (201 CREATED).
      */
     @PostMapping
-    public ResponseEntity<?> adicionarItem(@RequestBody ItemCardapio item, @RequestParam String chave) {
-        try {
-            ItemCardapioDTO novoItem = cardapioService.adicionarItem(item, chave);
-            return ResponseEntity.status(HttpStatus.CREATED).body(novoItem);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+    public ResponseEntity<ItemCardapioDTO> adicionarItem(@RequestBody ItemCardapio item, @RequestParam String chave) {
+        ItemCardapioDTO novoItem = cardapioService.adicionarItem(item, chave);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoItem);
     }
 
     /**
@@ -56,7 +52,7 @@ public class CardapioController {
      * @return Uma resposta vazia com status (204 No Content).
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarItem(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarItem(@PathVariable Long id) {
         cardapioService.deletarItem(id);
         return ResponseEntity.noContent().build();
     }

@@ -5,6 +5,7 @@ import org.example.restaurante.dto.ItemDTO;
 import org.example.restaurante.Model.Comanda;
 import org.example.restaurante.Model.ItemCardapio;
 import org.example.restaurante.Model.ItemComanda;
+import org.example.restaurante.exception.ResourceNotFoundException;
 import org.example.restaurante.repository.ComandaRepository;
 import org.example.restaurante.repository.ItemCardapioRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -63,14 +64,14 @@ public class ComandaService {
      * @param nomeItem O nome do item do cardápio a ser adicionado.
      * @param quantidade A quantidade do item.
      * @return O DTO da comanda atualizada.
-     * @throws RuntimeException se a comanda ou o item do cardápio não forem encontrados.
+     * @throws ResourceNotFoundException se a comanda ou o item do cardápio não forem encontrados.
      */
     public ComandaDTO adicionarItemAComandaExistente(Long comandaId, String nomeItem, int quantidade) {
         Comanda comanda = comandaRepository.findById(comandaId)
-                .orElseThrow(() -> new RuntimeException("Comanda não encontrada com ID: " + comandaId));
+                .orElseThrow(() -> new ResourceNotFoundException("Comanda não encontrada com ID: " + comandaId));
 
         ItemCardapio itemCardapio = itemCardapioRepository.findByNome(nomeItem)
-                .orElseThrow(() -> new RuntimeException("Item não encontrado no cardápio: " + nomeItem));
+                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado no cardápio: " + nomeItem));
 
         ItemComanda itemComanda = new ItemComanda();
         itemComanda.setNome(itemCardapio.getNome());
@@ -118,11 +119,11 @@ public class ComandaService {
      * Notifica os clientes via WebSocket sobre a atualização da comanda.
      * @param id O ID da comanda a ser fechada.
      * @return O DTO da comanda atualizada com o novo status.
-     * @throws RuntimeException se nenhuma comanda for encontrada com o ID fornecido.
+     * @throws ResourceNotFoundException se nenhuma comanda for encontrada com o ID fornecido.
      */
     public ComandaDTO fecharComanda(Long id) {
         Comanda comanda = comandaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comanda não encontrada com ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Comanda não encontrada com ID: " + id));
 
         comanda.setStatus("FECHADA");
         comanda.setDataFechamento(LocalDateTime.now());

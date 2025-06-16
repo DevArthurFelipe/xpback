@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 /**
  * Controlador REST para gerenciar as operações relacionadas às Comandas.
  * Responsável por receber as requisições HTTP para criar, listar, fechar
@@ -41,17 +42,12 @@ public class ComandaController {
     /**
      * Cria e salva uma nova comanda no sistema.
      * @param comanda O corpo da requisição contendo os dados da nova comanda.
-     * @return Um ResponseEntity com o ComandaDTO da nova comanda em caso de sucesso (201 CREATED),
-     * ou uma mensagem de erro em caso de falha de validação (400 Bad Request).
+     * @return Um ResponseEntity com o ComandaDTO da nova comanda em caso de sucesso (201 CREATED).
      */
     @PostMapping
-    public ResponseEntity<?> salvarNovaComanda(@RequestBody Comanda comanda) {
-        try {
-            ComandaDTO savedComanda = comandaService.salvarNovaComanda(comanda);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedComanda);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ComandaDTO> salvarNovaComanda(@RequestBody Comanda comanda) {
+        ComandaDTO savedComanda = comandaService.salvarNovaComanda(comanda);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedComanda);
     }
 
     /**
@@ -79,18 +75,13 @@ public class ComandaController {
      * Adiciona um novo item a uma comanda já existente.
      * @param comandaId O ID da comanda a ser modificada.
      * @param itemAdicionar O corpo da requisição contendo os dados do item a ser adicionado.
-     * @return Um ResponseEntity com o ComandaDTO atualizado em caso de sucesso (200 OK),
-     * ou uma mensagem de erro se a comanda ou o item não forem encontrados (404 Not Found).
+     * @return Um ResponseEntity com o ComandaDTO atualizado em caso de sucesso (200 OK).
      */
     @PostMapping("/{comandaId}/add-item")
-    public ResponseEntity<?> adicionarItemAComanda(@PathVariable Long comandaId,
-                                                   @RequestBody ItemDTO itemAdicionar) {
-        try {
-            ComandaDTO comandaAtualizada = comandaService.adicionarItemAComandaExistente(
-                    comandaId, itemAdicionar.getNome(), itemAdicionar.getQuantidade());
-            return ResponseEntity.ok(comandaAtualizada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<ComandaDTO> adicionarItemAComanda(@PathVariable Long comandaId,
+                                                            @RequestBody ItemDTO itemAdicionar) {
+        ComandaDTO comandaAtualizada = comandaService.adicionarItemAComandaExistente(
+                comandaId, itemAdicionar.getNome(), itemAdicionar.getQuantidade());
+        return ResponseEntity.ok(comandaAtualizada);
     }
 }

@@ -1,4 +1,3 @@
-
 package org.example.restaurante.Controller;
 
 import org.example.restaurante.dto.FuncionarioDTO;
@@ -25,16 +24,11 @@ public class RegistroController {
      * Apenas requisições com a chave de acesso correta são autorizadas.
      * @param chave A chave mestra de acesso necessária para autorizar a operação.
      * @param funcionario O corpo da requisição contendo os dados do novo funcionário (username, password, cargo).
-     * @return Um ResponseEntity com o FuncionarioDTO do novo funcionário em caso de sucesso (201 CREATED),
-     * ou uma mensagem de erro em caso de chave inválida (401 Unauthorized).
+     * @return Um ResponseEntity com o FuncionarioDTO do novo funcionário em caso de sucesso (201 CREATED).
      */
     @PostMapping
-    public ResponseEntity<?> processRegistro(@RequestParam String chave, @RequestBody Funcionario funcionario) {
-        try {
-            FuncionarioDTO novoFuncionarioDTO = funcionarioService.registrarFuncionario(funcionario, chave);
-            return ResponseEntity.status(HttpStatus.CREATED).body(novoFuncionarioDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+    public ResponseEntity<FuncionarioDTO> processRegistro(@RequestParam String chave, @RequestBody Funcionario funcionario) {
+        FuncionarioDTO novoFuncionarioDTO = funcionarioService.registrarFuncionario(funcionario, chave);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoFuncionarioDTO);
     }
 }
